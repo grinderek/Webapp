@@ -1,19 +1,21 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const mysql = require('mysql');
+const mysql = require('mysql2');
+const favicon = require("serve-favicon");
 const session = require('express-session');
 const MySqlStore = require('express-mysql-session')(session);
 const Router = require('./Router')
 
-app.use(express.static('public'));
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 const db = mysql.createConnection({
-    host: 'us-cdbr-east-03.cleardb.com',
-    user: 'bd37c1454987a6',
-    password: '8db9f6afe87e2b0',
-    database: 'heroku_d996ea8e71531df'
+    host: 'qz8si2yulh3i7gl3.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'u1sosv7ko6tuwyta',
+    password: 'm1re4s1e5ogydudm',
+    database: 'l4xad57g8hxqizn0'
 });
 
 db.connect(function(err){
@@ -30,8 +32,8 @@ const sessionStore = new MySqlStore({
 }, db);
 
 app.use(session({
-    key: "jdf0pjq0chj4390hf213vhc07h3421s0129s219hs",
-    secret: "fja98chjn9nh439n822291nhd89ch913123hcv348",
+    key: "jdf0pjq0chj4390hf213vh",
+    secret: "fja98chjn9nh439n8222sda",
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
@@ -44,7 +46,7 @@ app.use(session({
 new Router(app, db);
 
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(process.env.port || 3000);
+app.listen(process.env.PORT || 3000);
